@@ -1,6 +1,5 @@
 import WebSocket from "ws";
 import url from "url";
-import http from "http";
 import Client from "./Client";
 
 export default class WebSocketServer {

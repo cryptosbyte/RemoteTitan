@@ -7,8 +7,68 @@
     <title>Remote Titan</title>
     <link rel="stylesheet" href="./main.css" />
     <link rel="stylesheet" href="./terminal.css" />
+    <style>
+      .external {
+        background-color: black;
+        opacity: 0.3;
+        display: table;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .middle {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .internal {
+        opacity: 1;
+        margin-left: auto;
+        margin-right: auto;
+        width: 400px;
+      }
+    </style>
     <script defer>
-        const ws = new WebSocket(`ws://${new URL(window.location.href).host}/api/terminal`)
+      const ws = new WebSocket(
+        `ws://${new URL(window.location.href).host}/api/terminal`
+      );
+
+      setTimeout(() => {
+        if (ws.readyState === 1) {
+          ws.send(
+            JSON.stringify({
+              type: "test_payload",
+              value: "none",
+            })
+          );
+        }
+      }, 5);
+
+      ws.onmessage = function (data) {
+        data = JSON.parse(data.data);
+
+        if (data.value !== undefined)
+          document.querySelector(
+            "div.history"
+          ).innerHTML += `<p>${data.value}</p>`;
+
+        if (data.type === "validated") {
+          document.querySelector("div.validate").innerHTML = "";
+          document.querySelector("div.root").style = "";
+        }
+      };
+
+      function conn() {
+        let inp = document.querySelector(".conn");
+        if (!inp.value) return;
+        ws.send(
+          JSON.stringify({
+            type: "verify",
+            value: inp.value,
+          })
+        );
+      }
 
       function execute(event) {
         const val = event.target.parentElement.children[0].children[4];
@@ -19,46 +79,66 @@
         if (val.value.includes("clear"))
           event.target.parentElement.parentElement.children[2].children[0].textContent =
             "";
-        else {
 
-        }
+        ws.send(
+          JSON.stringify({
+            type: "cmd",
+            value: val.value,
+          })
+        );
 
         val.value = "";
       }
     </script>
   </head>
   <body>
-    <div class="group">
-      <div class="terminal_entry">
+    <div class="root" style="filter: blur(1px); pointer-events: none">
+      <div class="group">
+        <div class="terminal_entry">
+          <span>&nbsp;</span>
+          <p class="user" style="color: #2ca32c">~</p>
+          <p class="user"><span>&nbsp;</span>$</p>
+          <span>&nbsp;</span>
+          <input
+            placeholder="Enter Terminal Command"
+            class="entry"
+            spellcheck="false"
+          />
+        </div>
         <span>&nbsp;</span>
-        <p class="user" style="color: #2ca32c">~</p>
-        <p class="user"><span>&nbsp;</span>$</p>
-        <span>&nbsp;</span>
-        <input
-          placeholder="Enter Terminal Command"
-          class="entry"
-          spellcheck="false"
-        />
+        <button class="execute" onclick="execute(event)">Run</button>
       </div>
-      <span>&nbsp;</span>
-      <button class="execute" onclick="execute(event)">Run</button>
+      <br />
+      <div class="history">
+        <p class="time"></p>
+      </div>
+      <script>
+        document.querySelector(
+          "p.time"
+        ).textContent = `[${new Date().getHours()}:${
+          new Date().getMinutes() > 10
+            ? new Date().getMinutes()
+            : `0${new Date().getMinutes()}`
+        }:${
+          new Date().getSeconds() > 10
+            ? new Date().getSeconds()
+            : `0${new Date().getSeconds()}`
+        }] Remote Titan has been launched!`;
+      </script>
     </div>
-    <br />
-    <div class="history">
-      <p class="time"></p>
+    <div class="validate">
+      <div class="external">
+        <div class="middle">
+          <div class="internal">
+            <input
+              class="conn"
+              placeholder="Enter Connection Code:"
+              maxlength="6"
+            />
+            <button onclick="conn()">Submit</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <script>
-      document.querySelector(
-        "p.time"
-      ).textContent = `[${new Date().getHours()}:${
-        new Date().getMinutes() > 10
-          ? new Date().getMinutes()
-          : `0${new Date().getMinutes()}`
-      }:${
-        new Date().getSeconds() > 10
-          ? new Date().getSeconds()
-          : `0${new Date().getSeconds()}`
-      }] Remote Titan has been launched!`;
-    </script>
   </body>
 </html>
