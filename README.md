@@ -14,9 +14,9 @@ $ ts-node src/index.ts -h
 And make sure to go to your computer settings and let your local IP accessible to other devices in your network.
 
 These images are taken from a Chromebook running Crostini Linux.
-![](https://github.com/cryptosbyte/RemoteTitan/blob/main/media/images/crostini/Step%201.png)  
-![](https://github.com/cryptosbyte/RemoteTitan/blob/main/media/images/crostini/Step%202.png)  
-![](https://github.com/cryptosbyte/RemoteTitan/blob/main/media/images/crostini/Step%203.png)  
+![](https://github.com/cryptosbyte/RemoteTitan/blob/main/images/crostini/Step%201.png)  
+![](https://github.com/cryptosbyte/RemoteTitan/blob/main/images/crostini/Step%202.png)  
+![](https://github.com/cryptosbyte/RemoteTitan/blob/main/images/crostini/Step%203.png)  
 
 ## How To Run
 Just execute the following command...
