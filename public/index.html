@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remote Titan</title>
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./terminal.css" />
+    <script defer>
+        const ws = new WebSocket(`ws://${new URL(window.location.href).host}/api/terminal`)
+
+      function execute(event) {
+        const val = event.target.parentElement.children[0].children[4];
+        if (!val.value) {
+          return;
+        }
+
+        if (val.value.includes("clear"))
+          event.target.parentElement.parentElement.children[2].children[0].textContent =
+            "";
+        else {
+
+        }
+
+        val.value = "";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="group">
+      <div class="terminal_entry">
+        <span>&nbsp;</span>
+        <p class="user" style="color: #2ca32c">~</p>
+        <p class="user"><span>&nbsp;</span>$</p>
+        <span>&nbsp;</span>
+        <input
+          placeholder="Enter Terminal Command"
+          class="entry"
+          spellcheck="false"
+        />
+      </div>
+      <span>&nbsp;</span>
+      <button class="execute" onclick="execute(event)">Run</button>
+    </div>
+    <br />
+    <div class="history">
+      <p class="time"></p>
+    </div>
+    <script>
+      document.querySelector(
+        "p.time"
+      ).textContent = `[${new Date().getHours()}:${
+        new Date().getMinutes() > 10
+          ? new Date().getMinutes()
+          : `0${new Date().getMinutes()}`
+      }:${
+        new Date().getSeconds() > 10
+          ? new Date().getSeconds()
+          : `0${new Date().getSeconds()}`
+      }] Remote Titan has been launched!`;
+    </script>
+  </body>
+</html>
