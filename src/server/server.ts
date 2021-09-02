@@ -20,7 +20,7 @@ module.exports = {
             break;
 
           case "/main.css":
-            fs.readFile("./public/terminal.css", "UTF-8", (err, html) => {
+            fs.readFile("./public/main.css", "UTF-8", (err, html) => {
               response.writeHead(200, {
                 "Content-Type": "text/css",
               });
@@ -29,7 +29,7 @@ module.exports = {
             break;
 
           case "/terminal.css":
-            fs.readFile("./public/main.css", "UTF-8", (err, html) => {
+            fs.readFile("./public/terminal.css", "UTF-8", (err, html) => {        
               response.writeHead(200, {
                 "Content-Type": "text/css",
               });
